@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Leaf, TrendingDown, Users, ShieldCheck, ArrowRight, Star, MapPin } from "lucide-react";
+import { Leaf, TrendingDown, Users, ShieldCheck, ArrowRight, Star, MapPin, IndianRupee, Handshake, BarChart3, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getProducts } from "@/lib/store";
@@ -32,7 +32,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap gap-3 justify-center">
               {user ? (
                 <Link href={user.role === "farmer" ? "/farmer-dashboard" : "/home"}>
-                  <Button size="lg" className="gap-2 px-8" data-testid="button-hero-cta-primary">
+                  <Button size="lg" className="gap-2 px-8 rounded-xl shadow-md" data-testid="button-hero-cta-primary">
                     {user.role === "farmer" ? "Go to Dashboard" : "Shop Now"}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -40,13 +40,13 @@ export default function LandingPage() {
               ) : (
                 <>
                   <Link href="/home">
-                    <Button size="lg" className="gap-2 px-8" data-testid="button-hero-shop">
+                    <Button size="lg" className="gap-2 px-8 rounded-xl shadow-md" data-testid="button-hero-shop">
                       Browse Marketplace
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
                   <Link href="/signup">
-                    <Button size="lg" variant="outline" className="gap-2 px-8" data-testid="button-hero-signup">
+                    <Button size="lg" variant="outline" className="gap-2 px-8 rounded-xl" data-testid="button-hero-signup">
                       Sell Your Produce
                     </Button>
                   </Link>
@@ -68,6 +68,88 @@ export default function LandingPage() {
                 <div className="text-sm text-muted-foreground mt-0.5">{stat.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* IMPACT SECTION */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary/5 to-accent/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge className="mb-3 bg-accent/10 text-accent border-accent/20 px-3 py-1" data-testid="badge-impact">
+              Real Impact, Every Purchase
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3" data-testid="text-impact-heading">
+              The FarmConnect Difference
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Every transaction on FarmConnect creates real, measurable impact for farmers and families
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Farmers Earn More */}
+            <div className="relative bg-card rounded-2xl border border-card-border p-7 overflow-hidden group hover:shadow-lg transition-all duration-300 hover:-translate-y-1" data-testid="impact-card-farmers">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-8 translate-x-8" />
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+                <IndianRupee className="w-7 h-7 text-primary" />
+              </div>
+              <div className="text-4xl font-bold text-primary mb-1">30%</div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Farmers Earn More</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                By cutting out 3–4 layers of middlemen, farmers receive 30% higher income for the same produce.
+              </p>
+              <div className="mt-5 flex flex-col gap-2">
+                {["Direct payment within 24 hrs", "No commission charged", "AI-guided fair pricing"].map(point => (
+                  <div key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <CheckCircle className="w-3.5 h-3.5 text-primary shrink-0" />
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Consumers Save */}
+            <div className="relative bg-card rounded-2xl border border-card-border p-7 overflow-hidden group hover:shadow-lg transition-all duration-300 hover:-translate-y-1" data-testid="impact-card-consumers">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -translate-y-8 translate-x-8" />
+              <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-5">
+                <BarChart3 className="w-7 h-7 text-accent" />
+              </div>
+              <div className="text-4xl font-bold text-accent mb-1">20%</div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Consumers Save</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Shop farm-fresh produce at 20% below supermarket prices — fresher quality, lower cost.
+              </p>
+              <div className="mt-5 flex flex-col gap-2">
+                {["Fresher than store-bought", "Transparent price history", "Save shown on every product"].map(point => (
+                  <div key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <CheckCircle className="w-3.5 h-3.5 text-accent shrink-0" />
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Zero Middlemen */}
+            <div className="relative bg-card rounded-2xl border border-card-border p-7 overflow-hidden group hover:shadow-lg transition-all duration-300 hover:-translate-y-1" data-testid="impact-card-zeromiddlemen">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 rounded-full -translate-y-8 translate-x-8" />
+              <div className="w-14 h-14 rounded-2xl bg-green-100 dark:bg-green-950/40 flex items-center justify-center mb-5">
+                <Handshake className="w-7 h-7 text-green-600" />
+              </div>
+              <div className="text-4xl font-bold text-green-600 mb-1">Zero</div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Middlemen</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Farmer ↔ You. That's it. No brokers, no mandis, no retail markup — a direct, honest supply chain.
+              </p>
+              <div className="mt-5 flex flex-col gap-2">
+                {["Know exactly who grew it", "Traceable farm-to-fork", "Community over commerce"].map(point => (
+                  <div key={point} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <CheckCircle className="w-3.5 h-3.5 text-green-600 shrink-0" />
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -97,10 +179,10 @@ export default function LandingPage() {
                 icon: ShieldCheck,
                 title: "Quality Guaranteed",
                 description: "Verified farmers, transparent sourcing, and real consumer reviews for every product.",
-                color: "text-blue-600 bg-blue-50",
+                color: "text-blue-600 bg-blue-50 dark:bg-blue-950/30",
               },
             ].map((feature) => (
-              <div key={feature.title} className="text-center p-6 rounded-2xl bg-card border border-card-border hover:shadow-md transition-shadow" data-testid={`feature-${feature.title.toLowerCase().replace(" ", "-")}`}>
+              <div key={feature.title} className="text-center p-7 rounded-2xl bg-card border border-card-border hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" data-testid={`feature-${feature.title.toLowerCase().replace(" ", "-")}`}>
                 <div className={`w-14 h-14 rounded-2xl ${feature.color} flex items-center justify-center mx-auto mb-4`}>
                   <feature.icon className="w-7 h-7" />
                 </div>
@@ -121,7 +203,7 @@ export default function LandingPage() {
               <p className="text-muted-foreground mt-1">Harvested and listed this week</p>
             </div>
             <Link href="/home">
-              <Button variant="outline" className="gap-1" data-testid="button-view-all">
+              <Button variant="outline" className="gap-1 rounded-xl" data-testid="button-view-all">
                 View All
                 <ArrowRight className="w-4 h-4" />
               </Button>
@@ -129,27 +211,65 @@ export default function LandingPage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProducts.map(product => (
-              <div key={product.id} className="bg-card rounded-xl border border-card-border overflow-hidden hover:shadow-md transition-all duration-200 hover:-translate-y-0.5" data-testid={`featured-card-${product.id}`}>
+              <div key={product.id} className="bg-card rounded-2xl border border-card-border overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group" data-testid={`featured-card-${product.id}`}>
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                  <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs">
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  <Badge className="absolute top-2.5 left-2.5 bg-primary text-primary-foreground text-xs font-bold shadow-sm">
                     Save ₹{product.marketPrice - product.price}/{product.unit}
                   </Badge>
+                  <div className="absolute bottom-2.5 left-3 right-3">
+                    <h3 className="font-bold text-white text-base drop-shadow">{product.name}</h3>
+                    <p className="text-white/80 text-xs">{product.farmerName}</p>
+                  </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-foreground">{product.name}</h3>
-                  <div className="flex items-center gap-1 mt-1 mb-2">
+                  {product.farmerDescription && (
+                    <p className="text-[11px] text-muted-foreground mb-2 line-clamp-1">{product.farmerDescription}</p>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xl font-bold text-primary">₹{product.price}</span>
+                      <span className="text-sm text-muted-foreground">/{product.unit}</span>
+                      <span className="text-sm text-muted-foreground line-through ml-1">₹{product.marketPrice}</span>
+                    </div>
+                    <div className="flex items-center gap-0.5 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded-md">
+                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <span className="text-xs font-semibold text-amber-700 dark:text-amber-400">{product.rating}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 mt-2">
                     <MapPin className="w-3 h-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">{product.location}</span>
-                    <span className="ml-auto flex items-center gap-0.5">
-                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs text-muted-foreground">{product.rating}</span>
-                    </span>
                   </div>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-xl font-bold text-primary">₹{product.price}</span>
-                    <span className="text-sm text-muted-foreground">/{product.unit}</span>
-                    <span className="text-sm text-muted-foreground line-through ml-1">₹{product.marketPrice}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Farmer Testimonial Strip */}
+      <section className="py-12 bg-background border-y border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { name: "Raju Sharma", location: "Pune, Maharashtra", quote: "FarmConnect doubled my income by removing the middlemen. Now my family earns what we deserve.", years: "10+ years farmer" },
+              { name: "Priya Patel", location: "Nashik, Maharashtra", quote: "I sold out my entire mango harvest in 3 days! Consumers love knowing where their food comes from.", years: "15+ years farmer" },
+              { name: "Suresh Kumar", location: "Thanjavur, Tamil Nadu", quote: "My basmati rice now reaches families in Mumbai directly. No broker, no delay, no drama.", years: "20+ years farmer" },
+            ].map(t => (
+              <div key={t.name} className="bg-card rounded-2xl border border-card-border p-5" data-testid={`testimonial-${t.name.split(" ")[0].toLowerCase()}`}>
+                <div className="flex mb-2">
+                  {[1,2,3,4,5].map(s => <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
+                </div>
+                <p className="text-sm text-foreground leading-relaxed mb-4 italic">"{t.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                    <Leaf className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.years} · {t.location}</p>
                   </div>
                 </div>
               </div>
@@ -166,7 +286,7 @@ export default function LandingPage() {
             Join thousands of farmers who sell directly to consumers. Get AI-powered price suggestions and reach customers without any commission.
           </p>
           <Link href="/signup">
-            <Button size="lg" variant="secondary" className="gap-2 px-8" data-testid="button-cta-farmer-signup">
+            <Button size="lg" variant="secondary" className="gap-2 px-8 rounded-xl shadow-md" data-testid="button-cta-farmer-signup">
               Start Selling Today
               <ArrowRight className="w-4 h-4" />
             </Button>

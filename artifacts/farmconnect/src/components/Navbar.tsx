@@ -1,8 +1,9 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Leaf, Menu, X, User, LogOut, LayoutDashboard, Package, ChevronDown } from "lucide-react";
+import { ShoppingCart, Leaf, Menu, X, User, LogOut, LayoutDashboard, Package, ChevronDown, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,7 +17,8 @@ import { Badge } from "@/components/ui/badge";
 export default function Navbar() {
   const { user, logout } = useAuth();
   const { totalItems } = useCart();
-  const [location, navigate] = useLocation();
+  const { theme, toggleTheme } = useTheme();
+  const [, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
@@ -47,13 +49,26 @@ export default function Navbar() {
                 Marketplace
               </Button>
             </Link>
+
+            {/* Dark mode toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="w-8 h-8 text-muted-foreground hover:text-foreground"
+              data-testid="button-theme-toggle"
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+
             {!user && (
               <>
                 <Link href="/login">
                   <Button variant="ghost" size="sm" data-testid="link-login">Sign In</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm" className="ml-1" data-testid="link-signup">Get Started</Button>
+                  <Button size="sm" className="ml-1 rounded-xl" data-testid="link-signup">Get Started</Button>
                 </Link>
               </>
             )}
@@ -117,7 +132,16 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="w-8 h-8 text-muted-foreground"
+              data-testid="button-theme-toggle-mobile"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
             {user?.role === "consumer" && (
               <Link href="/cart">
                 <Button variant="ghost" size="icon" className="relative" data-testid="link-cart-mobile">

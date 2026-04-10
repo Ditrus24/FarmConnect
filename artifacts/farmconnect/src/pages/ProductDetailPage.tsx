@@ -1,5 +1,5 @@
 import { useParams, useLocation, Link } from "wouter";
-import { ArrowLeft, MapPin, Star, ShoppingCart, Package, User } from "lucide-react";
+import { ArrowLeft, MapPin, Star, ShoppingCart, Package, User, CheckCircle2, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getProducts, getFarmerById } from "@/lib/store";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -16,7 +17,8 @@ export default function ProductDetailPage() {
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
 
-  const product = getProducts().find(p => p.id === id);
+  const allProducts = getProducts();
+  const product = allProducts.find(p => p.id === id);
   const farmer = product ? getFarmerById(product.farmerId) : undefined;
 
   if (!product) {
@@ -43,6 +45,10 @@ export default function ProductDetailPage() {
     toast({ title: "Added to cart", description: `${quantity} × ${product.name} added.` });
   };
 
+  const peopleAlsoBuy = allProducts
+    .filter(p => p.id !== product.id && (p.category === product.category || p.farmerId === product.farmerId))
+    .slice(0, 3);
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <button
@@ -56,8 +62,16 @@ export default function ProductDetailPage() {
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Image */}
-        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-muted">
+        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-muted relative">
           <img src={product.image} alt={product.name} className="w-full h-full object-cover" data-testid="img-product-detail" />
+          {savings > 0 && (
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-primary text-primary-foreground font-bold text-sm px-3 py-1 shadow-md">
+                <TrendingDown className="w-3.5 h-3.5 mr-1" />
+                {savingsPct}% below market
+              </Badge>
+            </div>
+          )}
         </div>
 
         {/* Details */}
@@ -65,36 +79,40 @@ export default function ProductDetailPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Badge className="text-xs" variant="secondary">{product.category}</Badge>
-              {savings > 0 && (
-                <Badge className="text-xs bg-green-100 text-green-700 border-green-200">
-                  {savingsPct}% below market
-                </Badge>
-              )}
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-foreground" data-testid="text-product-name">{product.name}</h1>
-            <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1">
+
+            {/* Rating + Trust */}
+            <div className="flex items-center gap-3 mt-3 flex-wrap">
+              <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-950/40 px-2 py-1 rounded-lg">
                 {[1, 2, 3, 4, 5].map(s => (
-                  <Star key={s} className={`w-4 h-4 ${s <= Math.round(product.rating) ? "fill-amber-400 text-amber-400" : "text-muted-foreground"}`} />
+                  <Star key={s} className={`w-4 h-4 ${s <= Math.round(product.rating) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`} />
                 ))}
-                <span className="text-sm text-muted-foreground ml-1">({product.ratingCount} reviews)</span>
+                <span className="text-sm font-semibold text-amber-700 dark:text-amber-400 ml-1">{product.rating}</span>
+                <span className="text-sm text-muted-foreground ml-0.5">({product.ratingCount} reviews)</span>
               </div>
+              {product.ordersCompleted > 0 && (
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground bg-green-50 dark:bg-green-950/30 px-2 py-1 rounded-lg">
+                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  <span className="font-medium text-green-700 dark:text-green-400">{product.ordersCompleted} orders completed</span>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Price */}
-          <div className="bg-muted/40 rounded-xl p-4">
+          <div className="bg-muted/40 rounded-2xl p-5 border border-border">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-primary" data-testid="text-product-price">₹{product.price}</span>
-              <span className="text-muted-foreground">/{product.unit}</span>
+              <span className="text-4xl font-bold text-primary" data-testid="text-product-price">₹{product.price}</span>
+              <span className="text-muted-foreground text-lg">/{product.unit}</span>
             </div>
             {savings > 0 && (
-              <div className="mt-1 space-y-0.5">
+              <div className="mt-2 space-y-1">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-muted-foreground">Market price:</span>
                   <span className="line-through text-muted-foreground">₹{product.marketPrice}/{product.unit}</span>
                 </div>
-                <p className="text-green-600 font-semibold text-sm" data-testid="text-savings">
+                <p className="text-green-600 font-bold text-base" data-testid="text-savings">
                   You save ₹{savings}/{product.unit} by buying direct!
                 </p>
               </div>
@@ -115,14 +133,14 @@ export default function ProductDetailPage() {
 
           {/* Description */}
           <div>
-            <h3 className="font-semibold text-foreground mb-1">About this product</h3>
+            <h3 className="font-semibold text-foreground mb-1.5">About this product</h3>
             <p className="text-muted-foreground text-sm leading-relaxed" data-testid="text-product-description">{product.description}</p>
           </div>
 
           {/* Quantity + Add to Cart */}
           {user?.role !== "farmer" && (
             <div className="flex gap-3 items-center">
-              <div className="flex items-center border border-border rounded-lg overflow-hidden">
+              <div className="flex items-center border border-border rounded-xl overflow-hidden">
                 <button
                   className="px-3 py-2 hover:bg-muted transition-colors text-sm font-medium"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -139,7 +157,7 @@ export default function ProductDetailPage() {
                   +
                 </button>
               </div>
-              <Button className="flex-1 gap-2" onClick={handleAddToCart} data-testid="button-add-to-cart">
+              <Button className="flex-1 gap-2 rounded-xl shadow-md h-10" onClick={handleAddToCart} data-testid="button-add-to-cart">
                 <ShoppingCart className="w-4 h-4" />
                 Add to Cart — ₹{product.price * quantity}
               </Button>
@@ -157,9 +175,12 @@ export default function ProductDetailPage() {
               <User className="w-7 h-7 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground" data-testid="text-farmer-name">{farmer.name}</h3>
+              <h3 className="font-semibold text-foreground text-lg" data-testid="text-farmer-name">{farmer.name}</h3>
+              {product.farmerDescription && (
+                <p className="text-sm text-primary/80 font-medium mt-0.5">{product.farmerDescription}</p>
+              )}
               {farmer.location && (
-                <div className="flex items-center gap-1 text-muted-foreground text-sm mt-0.5">
+                <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1.5">
                   <MapPin className="w-3.5 h-3.5" />
                   <span>{farmer.location}</span>
                 </div>
@@ -168,11 +189,28 @@ export default function ProductDetailPage() {
                 <p className="text-muted-foreground text-sm mt-2 leading-relaxed" data-testid="text-farmer-description">{farmer.description}</p>
               )}
               <Link href={`/farmer-profile/${farmer.id}`}>
-                <Button variant="outline" size="sm" className="mt-3" data-testid="button-view-farmer-profile">
+                <Button variant="outline" size="sm" className="mt-3 rounded-xl" data-testid="button-view-farmer-profile">
                   View Profile
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* People Also Buy */}
+      {peopleAlsoBuy.length > 0 && (
+        <div className="mt-10">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-bold text-foreground" data-testid="text-people-also-buy">People Also Buy</h2>
+            <Link href="/home">
+              <Button variant="ghost" size="sm" className="text-primary text-sm">View All</Button>
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {peopleAlsoBuy.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </div>
       )}

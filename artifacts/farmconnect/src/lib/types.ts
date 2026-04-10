@@ -14,6 +14,7 @@ export interface Product {
   id: string;
   farmerId: string;
   farmerName: string;
+  farmerDescription?: string;
   name: string;
   price: number;
   marketPrice: number;
@@ -25,6 +26,7 @@ export interface Product {
   category: string;
   rating: number;
   ratingCount: number;
+  ordersCompleted: number;
   createdAt: string;
 }
 
@@ -112,4 +114,13 @@ export function getProductImage(productName: string): string {
     if (lowerName.includes(key)) return url;
   }
   return PRODUCT_IMAGES.default;
+}
+
+export function isNearUser(productLocation: string, userLocation?: string): boolean {
+  if (!userLocation) return false;
+  const pLoc = productLocation.toLowerCase();
+  const uLoc = userLocation.toLowerCase();
+  const pParts = pLoc.split(/[,\s]+/);
+  const uParts = uLoc.split(/[,\s]+/);
+  return pParts.some(p => p.length > 3 && uParts.some(u => u.length > 3 && (p.includes(u) || u.includes(p))));
 }

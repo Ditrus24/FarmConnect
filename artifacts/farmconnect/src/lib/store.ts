@@ -5,7 +5,10 @@ const KEYS = {
   currentUser: "fc_current_user",
   products: "fc_products",
   orders: "fc_orders",
+  version: "fc_data_version",
 };
+
+const CURRENT_SEED_VERSION = 2;
 
 function load<T>(key: string, fallback: T): T {
   try {
@@ -28,24 +31,38 @@ const SEED_FARMERS: User[] = [
 ];
 
 const SEED_PRODUCTS: Product[] = [
-  { id: "p1", farmerId: "farmer1", farmerName: "Raju Sharma", name: "Organic Tomatoes", price: 35, marketPrice: 50, quantity: 200, unit: "kg", image: getProductImage("tomato"), description: "Fresh, juicy organic tomatoes grown without pesticides. Perfect for cooking.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.5, ratingCount: 23, createdAt: new Date(Date.now() - 86400000 * 5).toISOString() },
-  { id: "p2", farmerId: "farmer1", farmerName: "Raju Sharma", name: "Fresh Spinach", price: 20, marketPrice: 40, quantity: 50, unit: "bunch", image: getProductImage("spinach"), description: "Crispy, fresh spinach harvested this morning. Rich in iron and nutrients.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.8, ratingCount: 15, createdAt: new Date(Date.now() - 86400000 * 3).toISOString() },
-  { id: "p3", farmerId: "farmer2", farmerName: "Priya Patel", name: "Alphonso Mangoes", price: 80, marketPrice: 140, quantity: 100, unit: "kg", image: getProductImage("mango"), description: "Premium Alphonso mangoes, hand-picked at peak ripeness. Naturally sweet.", location: "Nashik, Maharashtra", category: "Fruits", rating: 4.9, ratingCount: 41, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() },
-  { id: "p4", farmerId: "farmer2", farmerName: "Priya Patel", name: "Farm Fresh Carrots", price: 28, marketPrice: 55, quantity: 150, unit: "kg", image: getProductImage("carrot"), description: "Sweet, crunchy carrots. Great for salads, cooking, and juicing.", location: "Nashik, Maharashtra", category: "Vegetables", rating: 4.3, ratingCount: 18, createdAt: new Date(Date.now() - 86400000 * 4).toISOString() },
-  { id: "p5", farmerId: "farmer3", farmerName: "Suresh Kumar", name: "Basmati Rice", price: 55, marketPrice: 80, quantity: 500, unit: "kg", image: getProductImage("rice"), description: "Aromatic basmati rice, aged for 1 year. Long grain, fragrant variety.", location: "Thanjavur, Tamil Nadu", category: "Grains", rating: 4.7, ratingCount: 62, createdAt: new Date(Date.now() - 86400000 * 7).toISOString() },
-  { id: "p6", farmerId: "farmer3", farmerName: "Suresh Kumar", name: "Red Onions", price: 25, marketPrice: 40, quantity: 300, unit: "kg", image: getProductImage("onion"), description: "Sharp, pungent red onions. Fresh from the field, no cold storage.", location: "Thanjavur, Tamil Nadu", category: "Vegetables", rating: 4.2, ratingCount: 31, createdAt: new Date(Date.now() - 86400000 * 1).toISOString() },
-  { id: "p7", farmerId: "farmer1", farmerName: "Raju Sharma", name: "Fresh Potatoes", price: 20, marketPrice: 35, quantity: 400, unit: "kg", image: getProductImage("potato"), description: "All-purpose potatoes, ideal for cooking. Grown in well-drained soil.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.1, ratingCount: 27, createdAt: new Date(Date.now() - 86400000 * 6).toISOString() },
-  { id: "p8", farmerId: "farmer2", farmerName: "Priya Patel", name: "Banana Bunch", price: 30, marketPrice: 50, quantity: 80, unit: "dozen", image: getProductImage("banana"), description: "Naturally ripened bananas, sweet and creamy. No artificial ripening.", location: "Nashik, Maharashtra", category: "Fruits", rating: 4.6, ratingCount: 19, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() },
+  { id: "p1", farmerId: "farmer1", farmerName: "Raju Sharma", farmerDescription: "3rd generation organic farmer from Pune hills, farming since 1995", name: "Organic Tomatoes", price: 35, marketPrice: 50, quantity: 200, unit: "kg", image: getProductImage("tomato"), description: "Fresh, juicy organic tomatoes grown without pesticides. Perfect for cooking.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.5, ratingCount: 23, ordersCompleted: 142, createdAt: new Date(Date.now() - 86400000 * 5).toISOString() },
+  { id: "p2", farmerId: "farmer1", farmerName: "Raju Sharma", farmerDescription: "3rd generation organic farmer from Pune hills, farming since 1995", name: "Fresh Spinach", price: 20, marketPrice: 40, quantity: 50, unit: "bunch", image: getProductImage("spinach"), description: "Crispy, fresh spinach harvested this morning. Rich in iron and nutrients.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.8, ratingCount: 15, ordersCompleted: 78, createdAt: new Date(Date.now() - 86400000 * 3).toISOString() },
+  { id: "p3", farmerId: "farmer2", farmerName: "Priya Patel", farmerDescription: "Family orchard owner, Nashik — growing premium fruits for 15+ years", name: "Alphonso Mangoes", price: 80, marketPrice: 140, quantity: 100, unit: "kg", image: getProductImage("mango"), description: "Premium Alphonso mangoes, hand-picked at peak ripeness. Naturally sweet.", location: "Nashik, Maharashtra", category: "Fruits", rating: 4.9, ratingCount: 41, ordersCompleted: 310, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() },
+  { id: "p4", farmerId: "farmer2", farmerName: "Priya Patel", farmerDescription: "Family orchard owner, Nashik — growing premium fruits for 15+ years", name: "Farm Fresh Carrots", price: 28, marketPrice: 55, quantity: 150, unit: "kg", image: getProductImage("carrot"), description: "Sweet, crunchy carrots. Great for salads, cooking, and juicing.", location: "Nashik, Maharashtra", category: "Vegetables", rating: 4.3, ratingCount: 18, ordersCompleted: 94, createdAt: new Date(Date.now() - 86400000 * 4).toISOString() },
+  { id: "p5", farmerId: "farmer3", farmerName: "Suresh Kumar", farmerDescription: "Certified organic grains farmer, Thanjavur — zero-pesticide pledge since 2010", name: "Basmati Rice", price: 55, marketPrice: 80, quantity: 500, unit: "kg", image: getProductImage("rice"), description: "Aromatic basmati rice, aged for 1 year. Long grain, fragrant variety.", location: "Thanjavur, Tamil Nadu", category: "Grains", rating: 4.7, ratingCount: 62, ordersCompleted: 487, createdAt: new Date(Date.now() - 86400000 * 7).toISOString() },
+  { id: "p6", farmerId: "farmer3", farmerName: "Suresh Kumar", farmerDescription: "Certified organic grains farmer, Thanjavur — zero-pesticide pledge since 2010", name: "Red Onions", price: 25, marketPrice: 40, quantity: 300, unit: "kg", image: getProductImage("onion"), description: "Sharp, pungent red onions. Fresh from the field, no cold storage.", location: "Thanjavur, Tamil Nadu", category: "Vegetables", rating: 4.2, ratingCount: 31, ordersCompleted: 203, createdAt: new Date(Date.now() - 86400000 * 1).toISOString() },
+  { id: "p7", farmerId: "farmer1", farmerName: "Raju Sharma", farmerDescription: "3rd generation organic farmer from Pune hills, farming since 1995", name: "Fresh Potatoes", price: 20, marketPrice: 35, quantity: 400, unit: "kg", image: getProductImage("potato"), description: "All-purpose potatoes, ideal for cooking. Grown in well-drained soil.", location: "Pune, Maharashtra", category: "Vegetables", rating: 4.1, ratingCount: 27, ordersCompleted: 165, createdAt: new Date(Date.now() - 86400000 * 6).toISOString() },
+  { id: "p8", farmerId: "farmer2", farmerName: "Priya Patel", farmerDescription: "Family orchard owner, Nashik — growing premium fruits for 15+ years", name: "Banana Bunch", price: 30, marketPrice: 50, quantity: 80, unit: "dozen", image: getProductImage("banana"), description: "Naturally ripened bananas, sweet and creamy. No artificial ripening.", location: "Nashik, Maharashtra", category: "Fruits", rating: 4.6, ratingCount: 19, ordersCompleted: 128, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() },
 ];
 
 export function initStore() {
+  const storedVersion = load<number>(KEYS.version, 0);
+  const needsMigration = storedVersion < CURRENT_SEED_VERSION;
+
   const users = load<User[]>(KEYS.users, []);
-  if (users.length === 0) {
-    save(KEYS.users, SEED_FARMERS);
+  if (users.length === 0 || needsMigration) {
+    const existingNonSeedUsers = users.filter(u => !["farmer1", "farmer2", "farmer3", "consumer1"].includes(u.id));
+    save(KEYS.users, [...SEED_FARMERS, { id: "consumer1", name: "Anita Desai", email: "demo@consumer.com", role: "consumer" as const, location: "Mumbai, Maharashtra", createdAt: new Date(Date.now() - 86400000 * 10).toISOString() }, ...existingNonSeedUsers]);
   }
+
   const products = load<Product[]>(KEYS.products, []);
-  if (products.length === 0) {
-    save(KEYS.products, SEED_PRODUCTS);
+  if (products.length === 0 || needsMigration) {
+    const userProducts = products.filter(p => !["p1","p2","p3","p4","p5","p6","p7","p8"].includes(p.id));
+    const migratedUserProducts = userProducts.map(p => ({
+      ...p,
+      ordersCompleted: p.ordersCompleted ?? 0,
+    }));
+    save(KEYS.products, [...SEED_PRODUCTS, ...migratedUserProducts]);
+  }
+
+  if (needsMigration) {
+    save(KEYS.version, CURRENT_SEED_VERSION);
   }
 }
 
@@ -92,9 +109,9 @@ export function getProductsByFarmer(farmerId: string): Product[] {
   return getProducts().filter(p => p.farmerId === farmerId);
 }
 
-export function addProduct(product: Omit<Product, "id" | "createdAt">): Product {
+export function addProduct(product: Omit<Product, "id" | "createdAt" | "ordersCompleted"> & { ordersCompleted?: number }): Product {
   const products = getProducts();
-  const newProduct: Product = { ...product, id: generateId(), createdAt: new Date().toISOString() };
+  const newProduct: Product = { ...product, ordersCompleted: product.ordersCompleted ?? 0, id: generateId(), createdAt: new Date().toISOString() };
   save(KEYS.products, [...products, newProduct]);
   return newProduct;
 }
