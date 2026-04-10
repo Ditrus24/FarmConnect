@@ -1,0 +1,87 @@
+Build a full-stack web application called “FarmConnect AI” – a P2C (Producer-to-Consumer) marketplace connecting farmers directly with consumers.
+
+GOAL:
+Eliminate middlemen by allowing farmers to sell directly and consumers to buy at fair prices, with basic AI-based price suggestions.
+
+TECH STACK:
+
+* Frontend: React (with Tailwind CSS)
+* Backend: Supabase (Auth + Database + Storage)
+* No separate backend server required
+
+CORE FEATURES:
+
+1. AUTHENTICATION:
+
+* Signup/Login using Supabase Auth
+* Role selection: Farmer or Consumer
+* Store user role in database
+* Redirect:
+  Farmer → /farmer-dashboard
+  Consumer → /home
+
+2. DATABASE TABLES:
+
+* users (id, name, role)
+* products (id, farmer_id, name, price, quantity, image, description, location)
+* orders (id, user_id, items, total_price, status)
+
+3. FARMER FEATURES:
+
+* Dashboard page
+* Add product (name, price, quantity, image, description, location)
+* Show AI price suggestion (simple static logic based on product name)
+* View own products
+* Edit/Delete products
+* View orders
+
+4. CONSUMER FEATURES:
+
+* Home page with product listing
+* Product cards (image, price, farmer name, location)
+* Search and filter (by name/location)
+* Add to cart (use local state or database)
+* View cart and total price
+* Place order
+* View order history
+
+5. CART SYSTEM:
+
+* Add/remove items
+* Update quantity
+* Show total price
+
+6. ORDER SYSTEM:
+
+* Save orders in database
+* Order status: Pending / Delivered
+
+7. EXTRA FEATURES (IMPORTANT):
+
+* Show “You saved ₹X” compared to market price
+* Basic farmer profile page (name, products, description)
+* Simple rating display (static or basic)
+
+8. AI PRICE SUGGESTION:
+
+* Use simple logic:
+  Example:
+  Tomato → ₹30-40/kg
+  Onion → ₹20-30/kg
+* Show suggestion when farmer adds product
+
+9. UI REQUIREMENTS:
+
+* Clean, modern, minimal UI (like a simple e-commerce app)
+* Responsive (mobile + desktop)
+* Navbar with login/logout
+* Separate dashboards for farmer and consumer
+
+10. OUTPUT:
+
+* Full project structure
+* All pages and components
+* Supabase integration code
+* Clear instructions to run the app
+
+Keep the implementation simple, working, and demo-friendly. Avoid overengineering.
